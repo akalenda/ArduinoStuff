@@ -19,8 +19,8 @@ namespace Scrappy {
           state('s'),
 					leftMotor(leftMotor_),
 					riteMotor(rightMotor){
-				leftMotor->stop();
-				riteMotor->stop();
+				leftMotor->stopNow();
+				riteMotor->stopNow();
 			}
 			
 			void setSpeedTo(int speed) {
@@ -32,17 +32,9 @@ namespace Scrappy {
 				return leftMotor->getSpeed();
 			}
 			
-			int getMinimumSpeed() {
-        return leftMotor->getMinimumSpeed();
-			}
-
-      int getMaximumSpeed() {
-        return leftMotor->getMaximumSpeed();
-      }
-			
-			void stop() {
-				leftMotor->stop();
-				riteMotor->stop();
+			void stopNow() {
+				leftMotor->stopNow();
+				riteMotor->stopNow();
         state = 's';
 			}
 				

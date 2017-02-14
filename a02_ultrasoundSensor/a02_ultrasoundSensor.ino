@@ -1,7 +1,14 @@
 #include <NewPing.h>
 
-#define TRIGGER_PIN  14
-#define ECHO_PIN     15
+/**
+ * The pin numbers here depend on where you have the ultrasound
+ * sensor connected. If this program doesn't work, trace the wires
+ * to find which pins on the motherboard the pins on the sensor are
+ * connected to. You may need to try a few different pin numbers.
+ */
+
+#define TRIGGER_PIN  7
+#define ECHO_PIN     6
 #define MAX_DISTANCE 200
 
 NewPing DistanceSensor(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);

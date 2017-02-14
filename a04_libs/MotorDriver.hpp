@@ -7,12 +7,8 @@ namespace Scrappy {
 			virtual void setSpeedTo(int speed);
 
 			virtual int getSpeed();     
-
-			virtual int getMinimumSpeed();
 			
-			virtual int getMaximumSpeed();
-			
-			virtual void stop();
+			virtual void stopNow();
 				
 			virtual void goForward();
 			

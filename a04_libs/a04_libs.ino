@@ -1,5 +1,6 @@
 /**
- * @brief 
+ * @brief unfinished library that abstracts control of
+ *    Scrappy, my robot car.
  * @author Andrew Kalenda
  */
 
@@ -7,49 +8,51 @@
 #include "TwoWheelDrive.hpp"
 #include <NewPing.h>
 
-#define TRIGGER_PIN  14
-#define ECHO_PIN     15
+#define TRIGGER_PIN  7
+#define ECHO_PIN     6                                                                                                                                                                                                                                                                                           
 #define MAX_DISTANCE 200
 #define STOPPING_POINT 10
 
-Scrappy::TwoWheelDrive* scrappy;
 NewPing DistanceSensor(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
+int last_period_time;
 
 void setup() {
+    last_period_time = millis();
     Serial.begin(9600);
-    pinMode(13, OUTPUT);
 
-    scrappy = new Scrappy::TwoWheelDrive(
-      new Scrappy::ArduinoMotorShieldR3(true, false),
-      new Scrappy::ArduinoMotorShieldR3(false, false)
-    );
-    scrappy->setSpeedTo(255);
+    Scrappy::MotorDriver* a = new Scrappy::ArduinoMotorShieldR3(false);
+    a->setSpeedTo(255);
+
+    a->goForward();
+    delay(2000);
+    a->stopNow();
+    delay(2000);
+    a->goBackward(); 
+    delay(2000);
+    a->stopNow();
 }
 
 void loop() {
-    unsigned int distanceToObject = 111;//DistanceSensor.ping_cm();
-    bool mustStopMovingForward = distanceToObject < STOPPING_POINT;
-    if (scrappy->isMovingForward() && mustStopMovingForward)
-      stopDueToObject(distanceToObject);
-    if (Serial.available() > 0) {
-        char ch = Serial.read();
-        Serial.print("Received: ");
-        Serial.println(ch);
-        switch(ch) {
-          case 'g': (mustStopMovingForward) ? stopDueToObject(distanceToObject) : scrappy->goForward(); break;
-          case 'c': scrappy->spinLeft  (); break;
-          case 'v': scrappy->goBackward(); break;
-          case 'b': scrappy->spinRight (); break;
-          case 'q': scrappy->stop      (); exit(0);        
-          default : scrappy->stop      ();
-        }
-        Serial.println(scrappy->toString());
+    bluetooth_echo();
+    ultrasound_period_ping();
+}
+
+void ultrasound_period_ping() {
+    int current_time = millis();
+    if (current_time - last_period_time > 1000) {
+      unsigned int cm = DistanceSensor.ping_cm();
+      Serial.print("Distance: ");
+      Serial.print(cm);
+      Serial.println("cm");
+      last_period_time = current_time;
     }
 }
 
-void stopDueToObject(int distanceToObject) {
-  Serial.print("Stopping due to object at distance ");
-  Serial.println(distanceToObject);
-  scrappy->stop();
+void bluetooth_echo(){
+  if (Serial.available() > 0) {
+    char ch = Serial.read();
+    Serial.print("Recieved: ");
+    Serial.println(ch);
+  }
 }
 
