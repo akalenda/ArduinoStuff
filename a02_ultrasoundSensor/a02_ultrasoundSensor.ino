@@ -5,6 +5,9 @@
  * sensor connected. If this program doesn't work, trace the wires
  * to find which pins on the motherboard the pins on the sensor are
  * connected to. You may need to try a few different pin numbers.
+ * 
+ * This uses the NewPing library, which I installed as a zip from
+ * here: http://playground.arduino.cc/Code/NewPing
  */
 
 #define TRIGGER_PIN  7
